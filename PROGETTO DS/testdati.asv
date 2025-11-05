@@ -33,7 +33,7 @@ for m=1:7000
     if pcount >= 100
         fprintf('%s controls %g companies directly with ten percent or more \n', banche.RagioneSocialeCaratteriLatini{riga},pcount);
     end
-    %before cycling again for the next bank we must reset the pcount
+    %before cycling again for the next bank w
     pcount=0; 
 end
 toc

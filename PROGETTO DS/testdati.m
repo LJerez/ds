@@ -1,51 +1,64 @@
-clc; clear; close all;
-%IMPORTING DATASET 
-% ~ NOT OPERATOR
-banche = readtable ("terzo.xlsx",Sheet=2);
+%clc; clear; close all;
+% %IMPORTING DATASET 
+% % ~ NOT OPERATOR
+%banche = readtable ("quarto.xlsx",Sheet=2);
 %Variable definition
 m=1;
 riga=1;
 pcount=0;
 adjmatrix=[];
-%time spent running
-tic
-% for cycle that loops 7000 times (Bank size is appoximately 7000)
-for m=1:7000
-    %generating bank number to compare it to the one in the "Var1" slot
-    numbanca = string(m)+".";
-    % loops until the var numbanca is equal to the one defined or the slot
-    % is empty and simultaneously we didn't end the document (error prevention)
-    % Translation: all the partecipations fill a lot of slots with empty
-    % cells so if we are in the first cell with the corresponding id or in
-    % the following ones with the empty cells we loop
-    while (isequal(banche.Var1{riga},numbanca) || isempty(banche.Var1{riga})) & riga<(height(banche)-1)
-        % if the bank owns shares with a numeric value we add it to the
-        % partecipazioni count (pcount)
-        if ~ isnan(str2double(banche.Partecipazioni_Diretta{riga})) 
-           % fprintf('%s controls %s directly with %s percent \n', banche.RagioneSocialeCaratteriLatini{m}, banche.Partecipate_Nome{i} ,banche.Partecipazioni_Diretta{i});
-            pcount=pcount+1;
-        end
-        %we go to the next line
-        riga=riga+1;
+nbank=0;
+z=1+".";
+isequal(banche.Var1{1},z);
+for n=1:45943
+    if ~ isempty(banche.Var1{n})
+        nbank=nbank+1;
     end
-    %if the bank owns shares in 100 or more companies it prints in the
-    %console
-    if pcount >= 100
-        fprintf('%s controls %g companies directly with ten percent or more \n', banche.RagioneSocialeCaratteriLatini{riga},pcount);
-    end
-    %before cycling again for the next bank we must reset the pcount
-    pcount=0; 
 end
-toc
-m
-%while loop, it loops all the firms controlled by Banco santander and tells
-%us the control percentage
-% while isequal(banche.Var1{i},'1.') || isempty(banche.Var1{i})
+%29047 NG 29049 - 29050 vuoto 29033 mag
+%newtab.SubDir{29033}(1)
+% conve=str2double(newtab.SubDir{29033})
+% isnan(conve)
+% isnumeric(conve)
+newtab = tablefiltering(banche);
+
+%[ris1,ris2,ris3] = controlling(banche,"ALTEC SPA")
+
+% for m=1:nbank
+%     %generating bank number to compare it to the one in the "Var1" slot
+%     numbanca = string(m)+".";
+%     while (isequal(banche.Var1{riga},numbanca) || isempty(banche.Var1{riga})) & riga<(height(banche)-1)
+%         % if the bank owns shares with a numeric value we add it to the
+%         % partecipazioni count (pcount)
+%         if ~ isnan(str2double(banche.SUB_Direct_{riga})) 
+%            % fprintf('%s controls %s directly with %s percent \n', banche.RagioneSocialeCaratteriLatini{m}, banche.Partecipate_Nome{i} ,banche.Partecipazioni_Diretta{i});
+%             pcount=pcount+1;
+%         end
+%         %we go to the next line
+%         riga=riga+1;
+%     end
+%     %if the bank owns shares in 100 or more companies it prints in the
+%     %console
+%     if pcount >= 1
+%         fprintf('%s controls %g companies directly with ten percent or more \n', banche.CompanyNameLatinAlphabet{riga},pcount);
+%     end
+%     %before cycling again for the next bank we must reset the pcount
+%     pcount=0; 
+% end
+
+
+
+% while loop, it loops all the firms controlled by Banco santander and tells
+% us the control percentage
+% i=1;
+% k=0;
+% 
+% while isequal(banche.Var1{i},1) || isempty(banche.Var1{i})
 %     if ~ isnan(str2double(banche.Partecipazioni_Diretta{i}))
-%         fprintf('%s controls %s directly with %s percent \n', banche.RagioneSocialeCaratteriLatini{1}, banche.Partecipate_Nome{i} ,banche.Partecipazioni_Diretta{i});
+%         fprintf('%s controls %s directly with %s percent \n', banche.CompanyNameLatinAlphabet{1}, banche.SUB_Name{i} ,banche.SUB_Direct_{i});
 %         k=k+1;
 %     end
 %     i=i+1;
 % end
-% fprintf('%s controls %g companies directly with ten percent or more', banche.RagioneSocialeCaratteriLatini{1},k);
+% fprintf('%s controls %g companies directly with ten percent or more', banche.CompanyNameLatinAlphabet{1},k);
 

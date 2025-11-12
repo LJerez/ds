@@ -1,34 +1,12 @@
 function [outtab] = tablefiltering(btab)
-    btab = btab(:, {'Var1','CompanyNameLatinAlphabet','SUB_Name','SUB_Direct_'});
+btab = btab(:, {'Var1','CompanyNameLatinAlphabet','SUB_Name','SUB_Direct_'});
+%CHANGING THE NAMES
 btab.Properties.VariableNames{'CompanyNameLatinAlphabet'} = 'FirmName';
 btab.Properties.VariableNames{'SUB_Direct_'} = 'SubDir';
-notnumval={};
-for i = 2:height(btab)
-    giatrovato=0;
-    % Estrai il valore numerico da Var1
-    if ~isempty(btab.SubDir{i}) && (btab.SubDir{i}(1)=='>' || btab.SubDir{i}(1)=='±' || btab.SubDir{i}(1)=='<')
-        btab.SubDir{i}=btab.SubDir{i}(2:end);
-    end
-    conve = str2double(btab.SubDir{i});
-    % vogliamo sapere i valori non comuni
-    if isnan(conve)
-        if isempty(notnumval)
-            notnumval{end+1}=btab.SubDir{i};
-        else
-            for j=1:length(notnumval)
-                if  isequal(btab.SubDir{i},notnumval{j})
-                    giatrovato=1;
-                end
-            end
-            if giatrovato==0
-                notnumval{end+1}=btab.SubDir{i};
-            end
-        end
-        
-    end
-end
-disp(notnumval)
-
+% notnumval={};
+% righevuote=0;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%REMOVING FROM THE TABLE the columns that are unused
 A = btab.Var1;
 if iscell(A), A = str2double(A); end
 A_filled = fillmissing(A,'previous');
@@ -48,7 +26,52 @@ elseif isstring(names)
     end
 end
 btab.FirmName = names;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%FOR CYCLE, it removes the less and more signs and keeps the value
+for i = 2:height(btab)
+    % Estrai il valore numerico da Var1
+    if ~isempty(btab.SubDir{i}) && (btab.SubDir{i}(1)=='>' || btab.SubDir{i}(1)=='±' || btab.SubDir{i}(1)=='<')
+        btab.SubDir{i}=btab.SubDir{i}(2:end);
+    end
 
-
-    outtab = btab;
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%removes all the rows that don't have a numeric value
+convers = str2double(btab.SubDir);
+mask = isnan(convers);
+btab(mask, :) = [];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%SubDir from string to double
+btab.SubDir=str2double(btab.SubDir);
+outtab = btab;
+
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%random stuff
+
+    % conve = str2double(btab.SubDir{i});
+    % % vogliamo sapere i valori non comuni
+    % if isnan(conve)
+    %     if isempty(notnumval)
+    %         notnumval{end+1}=btab.SubDir{i};
+    %     else
+    %         for j=1:length(notnumval)
+    %             if  isequal(btab.SubDir{i},notnumval{j})
+    %                 giatrovato=1;
+    %             end
+    %         end
+    %         if isempty(btab.SubDir{i})
+    %             righevuote=righevuote+1;
+    %            % btab(i, :) = [];
+    %         end
+    %         if giatrovato==0
+    %             notnumval{end+1}=btab.SubDir{i};
+    %         end
+    %     end
+        
+    % end
+
+
+
+% eliminam& ~cellfun(@isempty, btab.SubDir);

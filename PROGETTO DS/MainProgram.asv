@@ -1,0 +1,20 @@
+clc;clearvars;close all
+%% add path
+addpath('C:\Users\jinho\OneDrive\Desktop\Datascience\2019_03_03_BCT')
+
+%% param
+year=[2024];
+
+%% example 
+IN_Strength = cell(size(year));
+%% load
+for i = 1:length(year)
+    filename = ['GCC_Bank',num2str(year(i)),'.mat'];
+    load(filename);
+
+    %  compute instrength
+    [ins,outs, stren] = strengths_dir(AdjG);
+    IN_Strength{i} = ins;
+
+
+end

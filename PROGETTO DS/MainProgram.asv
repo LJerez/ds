@@ -27,21 +27,15 @@ fprintf('Top %d nodi per PageRank:\n', topN);
 for i = 1:topN
     fprintf('%d) %s - %.4f\n', i, Nodi.Name{idx(i)}, PRsorted(i));
 end
-% Calcolo del PageRank
-PR = centrality(G, 'pagerank'); 
-[PRsorted, idx] = sort(PR, 'descend');
-figure;
-p = plot(G, 'Layout', 'force');  %use circle instead of force to be less resource-consuming
-% Dimensione dei nodi proporzionale al PageRank
-scaleFactor = 100;
-p.MarkerSize = scaleFactor * PR;
-%colour
-p.NodeCData = PR;
-colormap(jet); 
+p = plot(G, 'Layout', 'force');
+scaleFactor = 100;                         
+p.MarkerSize = scaleFactor * pagerankValues;  
+
+% (Opzionale) Colora i nodi secondo PageRank:contentReference[oaicite:9]{index=9}
+p.NodeCData = pagerankValues;   
+colormap(jet);
 colorbar;
-
-title('Centralità dei nodi (PageRank)');
-
+title('Grafo diretto con nodi scalati in base a PageRank');
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% average degree
 mean_deg = mean(ins);

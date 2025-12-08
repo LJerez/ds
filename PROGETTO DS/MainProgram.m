@@ -14,58 +14,16 @@ for i = 1:length(year)
     G = digraph(AdjG')
     %  compute instrength
     [ins,outs, stren] = strengths_dir(AdjG);
-  %%%%%%%%%%
-  %PAGERANK
-  %%%%%%%%%%
-PR = centrality(G, 'pagerank');
-[PRsorted, idx] = sort(PR, 'descend');
-
-
-% Mostra i top 5 nodi
-topN = min(5, numel(PR));  % in caso di grafo piccolo
-fprintf('Top %d nodi per PageRank:\n', topN);
-for i = 1:topN
-    fprintf('%d) %s - %.4f\n', i, Nodi.Name{idx(i)}, PRsorted(i));
-end
-% Calcolo del PageRank
-PR = centrality(G, 'pagerank'); 
-[PRsorted, idx] = sort(PR, 'descend');
-figure;
-p = plot(G, 'Layout', 'force');  %use circle instead of force to be less resource-consuming
-% Dimensione dei nodi proporzionale al PageRank
-scaleFactor = 100;
-p.MarkerSize = scaleFactor * PR;
-%colour
-p.NodeCData = PR;
-colormap(jet); 
-colorbar;
-
-title('Centralità dei nodi (PageRank)');
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% average degree
-mean_deg = mean(ins);
-mean_deg;
-%%%%%%%%%%%%%%%%
-%GENERAZIONE POWER LAW DISTRIBUTION
-%%%%%%%%%%%%%%%%
-% degree_values = sum(AdjG ~= 0, 2);
-% % Conteggio dei nodi per ciascun numero di link
-% [unique_degrees, ~, idx] = unique(degree_values);
-% counts = accumarray(idx, 1);
-% % Rimuovi eventuali gradi zero se servono (opzionale)
-% valid = unique_degrees > 0;
-% unique_degrees = unique_degrees(valid);
-% counts = counts(valid);
-% % Plot log-log
-% figure;
-% loglog(unique_degrees, counts, 'o', 'MarkerSize', 6,'Markerfacecolor','b', 'LineWidth', 1.5);
-% xlabel('Numero di link (grado)');
-% ylabel('Numero di nodi con quel grado');
-% title('Distribuzione del grado (scala log-log)');
-% 
-% if ~exist('figures', 'dir')
-%     mkdir('figures'); % crea la cartella se non esiste
-% end
-% saveas(gcf, fullfile('figures', 'plot_diamantini.png')); % salva come PNG
+% X FAR PARTIRE IL BOWTIE
+%[SCC, IN, OUT, tubes, tendrils] = BowtieFunc(AdjG, Nodi);
+%PER CENTRALITA E PLOT PAGE RANK
+%[PR, PRsorted, idx] = PlotPageRank(G, Nodi);
+%DEGREE EVALUATION
+%PlotDegreeDistribution(ins, outs);
+%PLOT LOG LOG DIST
+%PlotLogLogDist(AdjG);
+CC=clustering_coef_wd(AdjG);
+CC(~isfinite(CC)) = 0;
+C_totale = mean(CC)
+degreeClusteringScatterPlot(stren, CC);
 end

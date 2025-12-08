@@ -1,0 +1,19 @@
+function PlotLogLogDegree(AdjG)
+    % --- Calcolo grado nodi ---
+    degree_values = sum(AdjG ~= 0, 2);
+    % Conteggio dei nodi per ciascun grado
+    [unique_degrees, ~, idx] = unique(degree_values);
+    counts = accumarray(idx, 1);
+    % Rimuovi eventuali gradi zero
+    valid = unique_degrees > 0;
+    unique_degrees = unique_degrees(valid);
+    counts = counts(valid);
+    % --- Plot log-log ---
+    figure;
+    loglog(unique_degrees, counts, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'b', 'LineWidth', 1.5);
+    xlabel('Numero di link (grado)');
+    ylabel('Numero di nodi con quel grado');
+    title('Distribuzione del grado (scala log-log)');
+    grid on;
+%saveas(gcf, fullfile('figures', 'plot_diamantini.png')); % salva come PNG
+end

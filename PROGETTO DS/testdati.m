@@ -4,7 +4,7 @@ clc; clear; close all;
 banche = readtable ("banchedata.xlsx",Sheet=2);
 newtab = tablefiltering(banche);
 writetable(newtab,'datasetBank.xlsx')
-banks=readtable("datasetBank.xlsx");
+ banks=readtable("datasetBank.xlsx");
 
 % define variables
 FromBank = string(banks.FirmName);

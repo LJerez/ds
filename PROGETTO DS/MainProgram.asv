@@ -1,0 +1,153 @@
+clc;clearvars;close all
+%% add path
+addpath('C:\Users\jinho\OneDrive\Desktop\Datascience\2019_03_03_BCT')
+
+%% param
+year=[2024];
+
+%% example 
+IN_Strength = cell(size(year));
+%% load
+for i = 1:length(year)
+    filename = ['GCC_Bank',num2str(year(i)),'.mat'];
+    load(filename);
+    G = digraph(AdjG');
+    %  compute instrength
+    [ins,outs, stren] = strengths_dir(AdjG);
+% X FAR PARTIRE IL BOWTIE
+%[SCC, IN, OUT, tubes, tendrils] = BowtieFunc(AdjG, Nodi);
+%PER CENTRALITA E PLOT PAGE RANK
+%[PR, PRsorted, idx] = PlotPageRank(G, Nodi);
+%DEGREE EVALUATION
+%PlotDegreeDistribution(ins, outs);
+%PLOT LOG LOG DIST
+%PlotLogLogDist(AdjG);
+%  CC=clustering_coef_wd(AdjG);
+% CC(~isfinite(CC)) = 0;
+% C_totale = mean(CC)
+% degreeClusteringScatterPlot(stren, CC);
+%Assortativity
+%assortativity(ins,outs,AdjG)
+
+% strategies = {'targeted', 'targeted_IN_only', 'targeted_OUT_only', 'targeted'};
+% metrics    = {'pagerank', 'pagerank', 'pagerank', 'degree'};
+% colors     = {'r', 'b', 'g', 'm'};
+% labels     = {'PageRank', 'PageRank IN-only', 'PageRank OUT-only', 'Degree'};
+% figure; hold on; grid on;
+% xlabel('Fraction of Nodes Removed (f)');
+% ylabel('Relative Size of Giant Component (S)');
+% title('Robustness Analysis: Multiple Targeting Strategies');
+% for i = 1:length(strategies)
+%     [x, y] = robustness_multi(G, strategies{i}, metrics{i});
+%     plot(x, y, 'LineWidth', 2, 'Color', colors{i});
+% end
+% yline(0.5, '--k', '50% Threshold');
+% legend(labels, 'Location', 'northeast');
+
+
+
+
+%CORRECT TARGETED
+% strategy = 'targeted';
+% metric_type = 'pagerank';
+% 
+% % --- Chiama la funzione robustness ---
+% [x, y] = robustness(G, strategy, metric_type);
+% 
+% [x1, y1] = robustness_multi(G, 'targeted', 'pagerank');
+% [x2, y2] = robustness_multi(G, 'targeted_IN_only', 'pagerank');
+% [x3, y3] = robustness_multi(G, 'targeted_OUT_only', 'pagerank');
+% 
+% % --- Plot nello stesso grafico ---
+% figure;
+% plot(x1, y1, 'r', 'LineWidth', 2); hold on;
+% plot(x2, y2, 'b', 'LineWidth', 2);
+% plot(x3, y3, 'g', 'LineWidth', 2);
+% xlabel('Fraction of Nodes Removed (f)');
+% ylabel('Relative Size of Giant Component (S)');
+% title('Robustness Analysis: PageRank vs IN/OUT-degree PageRank');
+% grid on;
+% yline(0.5, '--k', '50% Threshold');
+% legend('Targeted PageRank', 'Targeted IN-degree PageRank', 'Targeted OUT-degree PageRank');
+
+
+%[x, y, curves] = randAttack(AdjG, 100, true);
+
+
+
+rand
+% % %%%%%%%%%%RANDOM
+% % Parameters
+N = size(AdjG, 1);
+num_iterations = 100;
+all_curves = zeros(num_iterations, N); % Store results of each run
+
+fprintf('Starting Monte Carlo simulation (%d iterations)...\n', num_iterations);
+
+% --- 2. MONTE CARLO LOOP ---
+for iter = 1:num_iterations
+
+    % Re-create the graph fresh for every iteration
+
+    % Track size for this specific run
+    % We pre-allocate for speed. Index 1 = 0 removed. Index N = N-1 removed.
+    run_curve = zeros(1, N); 
+
+    % Initial size (0 nodes removed)
+    run_curve(1) = numnodes(G);
+
+    % Removal Loop
+for step = 2:N
+
+    if numnodes(G) == 0
+        run_curve(step:end) = 0;
+        break;
+    end
+
+    target_idx = randi(numnodes(G));  
+    G = rmnode(G, target_idx);
+        % --- C. MEASURE FRAGMENTATION ---
+        if numnodes(G) > 0
+            % Measure Largest Weakly Connected Component
+            bins = conncomp(G, 'Type', 'weak');
+            largest_comp_size = max(histcounts(bins));
+            run_curve(step) = largest_comp_size;
+        else
+            run_curve(step) = 0;
+        end
+    end
+
+    % Store this run's curve in the main matrix
+    all_curves(iter, :) = run_curve;
+
+    % Optional: Print progress
+    if mod(iter, 10) == 0
+        fprintf('Completed iteration %d/%d\n', iter, num_iterations);
+    end
+end
+
+% --- 3. AGGREGATE RESULTS ---
+% Calculate the MEAN curve across all 50 runs
+avg_curve = mean(all_curves, 1);
+% Normalized Y-axis (Relative Size S)
+y_axis = avg_curve / N; 
+% Normalized X-axis (Fraction f removed)
+x_axis = (0:N-1) / N;
+figure; hold on;
+
+for i = 1:num_iterations
+    plot(x_axis, all_curves(i, :) / N, 'Color', [0.8 0.8 0.8]); 
+end
+
+xlabel('Fraction of Nodes Removed (f)');
+ylabel('Relative Size of Giant Component (S)');
+title('Robustness Analysis: Random Failure (100 runs)');
+grid on;
+xlim([0 1]);
+ylim([0 1]);
+
+% Threshold line (rimane)
+yline(0.5, '--k', 'Collapse Threshold');
+
+
+end

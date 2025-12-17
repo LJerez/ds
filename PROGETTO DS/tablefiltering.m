@@ -9,6 +9,8 @@ btab.Properties.VariableNames{'SUB_Direct_'} = 'SubDir';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %REMOVING FROM THE TABLE the columns that are unused
 A = btab.Var1;
+disp(btab.Properties.VariableNames)
+
 if iscell(A), A = str2double(A); end
 A_filled = fillmissing(A,'previous');
 if isnan(A_filled(1)), firstValid = find(~isnan(A_filled),1,'first'); A_filled(1:firstValid-1) = A_filled(firstValid); end

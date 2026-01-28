@@ -1,4 +1,5 @@
-function PlotDegreeDistribution(ins, outs)
+
+function PlotDegreeDistribution(ins, outs,year,yearDir)
 % PLOTDEGREEDISTRIBUTIONS - Plotta distribuzioni log-log di in-degree e out-degree.
 %
 % Input:
@@ -6,27 +7,57 @@ function PlotDegreeDistribution(ins, outs)
 %   outs - vettore degli out-strength / out-degree
 
     %% --- DISTRIBUZIONE IN-DEGREE ---
-    [deg_in, ~, idx_in] = unique(ins);
-    counts_in = accumarray(idx_in, 1);
+    % [deg_in, ~, idx_in] = unique(ins);
+    % counts_in = accumarray(idx_in, 1);
+    % 
+    % figure;
+    % loglog(deg_in, counts_in, 'bo-', 'LineWidth', 1.5, 'MarkerSize', 6);
+    % xlabel('In-degree k [log]');
+    % ylabel('N. nodi con degree k [log]');
+    % title('Distribuzione log-log degli In-degree');
+    % grid on;
+    % 
+    % % saveas(gcf, fullfile('figures', 'in.png'));
+    % 
+    % %% --- DISTRIBUZIONE OUT-DEGREE ---
+    % [deg_out, ~, idx_out] = unique(outs);
+    % counts_out = accumarray(idx_out, 1);
+    % 
+    % figure;
+    % loglog(deg_out, counts_out, 'ro-', 'LineWidth', 1.5, 'MarkerSize', 6);
+    % xlabel('Out-degree k [log]');
+    % ylabel('N. nodi con degree k [log]');
+    % title('Distribuzione log-log degli Out-degree');
+    % grid on;
+    % % saveas(gcf, fullfile('figures', 'out.png'));
+% --- DISTRIBUZIONE IN-DEGREE ---
+[deg_in, ~, idx_in] = unique(ins);
+counts_in = accumarray(idx_in, 1);
 
-    figure;
-    loglog(deg_in, counts_in, 'bo-', 'LineWidth', 1.5, 'MarkerSize', 6);
-    xlabel('In-degree k [log]');
-    ylabel('N. nodi con degree k [log]');
-    title('Distribuzione log-log degli In-degree');
-    grid on;
-    % saveas(gcf, fullfile('figures', 'in.png'));
+figure;
+loglog(deg_in, counts_in, 'bo-', 'LineWidth', 1.5, 'MarkerSize', 6);
+xlabel('In-degree k [log]');
+ylabel('N. nodi con degree k [log]');
+title('Distribuzione log-log degli In-degree');
+grid on;
 
-    %% --- DISTRIBUZIONE OUT-DEGREE ---
-    [deg_out, ~, idx_out] = unique(outs);
-    counts_out = accumarray(idx_out, 1);
+% Salvataggio figura
+inFileName = ['loglogind', year, '.png'];
+saveas(gcf, fullfile(yearDir, inFileName));
 
-    figure;
-    loglog(deg_out, counts_out, 'ro-', 'LineWidth', 1.5, 'MarkerSize', 6);
-    xlabel('Out-degree k [log]');
-    ylabel('N. nodi con degree k [log]');
-    title('Distribuzione log-log degli Out-degree');
-    grid on;
-    % saveas(gcf, fullfile('figures', 'out.png'));
+% --- DISTRIBUZIONE OUT-DEGREE ---
+[deg_out, ~, idx_out] = unique(outs);
+counts_out = accumarray(idx_out, 1);
+
+figure;
+loglog(deg_out, counts_out, 'ro-', 'LineWidth', 1.5, 'MarkerSize', 6);
+xlabel('Out-degree k [log]');
+ylabel('N. nodi con degree k [log]');
+title('Distribuzione log-log degli Out-degree');
+grid on;
+
+% Salvataggio figura
+outFileName = ['loglogoutd', year, '.png'];
+saveas(gcf, fullfile(yearDir, outFileName));
 
 end

@@ -1,8 +1,7 @@
 function [outtab] = tablefiltering(btab)
-btab = btab(:, {'Var1','CompanyNameLatinAlphabet','SUB_Name','SUB_Direct_','Turnover'});
+btab = btab(:, {'Var1','CompanyNameLatinAlphabet','SUB_Name','SUB_Direct_'});
 %CHANGING THE NAMES
 btab.Properties.VariableNames{'CompanyNameLatinAlphabet'} = 'FirmName';
-btab.Properties.VariableNames{'Turnover'} = 'TO';
 btab.Properties.VariableNames{'SUB_Direct_'} = 'SubDir';
 % notnumval={};
 % righevuote=0;

@@ -1,10 +1,11 @@
 clc; clear; close all;
+addpath('C:\Users\jinho\OneDrive\Desktop\Datascience\ds\PROGETTO DS\datasets\')
 % %IMPORTING DATASET 
 % % ~ NOT OPERATOR
-banche = readtable ("banchedata.xlsx",Sheet=2);
-newtab = tablefiltering(banche);
-writetable(newtab,'datasetBank.xlsx')
- banks=readtable("datasetBank.xlsx");
+%banche = readtable ("data24TA.xlsx",Sheet=2);
+%newtab = tablefiltering(banche);
+%writetable(newtab,'test.xlsx')
+ banks=readtable("test.xlsx");
 
 % define variables
 FromBank = string(banks.FirmName);
@@ -31,11 +32,11 @@ sparseness=100*nnz(Adj)/(length(Adj)^2)
 nodes_in_GCC = find(bin == idx); % nodes belonging to it
 G_giant = subgraph(G, nodes_in_GCC);
 AdjG = adjacency(G_giant);
-%plot(G_giant)
-%disp('GCC Density')
+plot(G_giant)
+disp('GCC Density')
 100*nnz(AdjG)/(length(AdjG)^2)
 
 Nodi = G_giant.Nodes;
 
-save('GCC_Bank.mat','AdjG',"Nodi")
+save('GCC_Bank2024.mat','AdjG',"Nodi")
 

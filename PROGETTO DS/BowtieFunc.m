@@ -1,6 +1,6 @@
 function [SCC_nodes, IN_nodes, OUT_nodes, tubes, tendrils] = BowtieFunc(AdjG, Nodi,year,yearDir)
 % BOWTIEFUNC - Calcola struttura Bow-Tie di un grafo orientato
-M = digraph(AdjG', Nodi.Name);
+M = digraph(AdjG, Nodi.Name);
 
 % --- 1. Trova la SCC principale ---
 S = conncomp(M,'Type','strong');
@@ -95,12 +95,12 @@ for n = tubes,     colors(idx_map(n),:) = [1 0.5 0]; end     % arancio
 for n = tendrils,  colors(idx_map(n),:) = [0.6 0 0.6]; end   % viola
 figure;
 plot(G_sub, 'NodeColor', colors, 'Layout','force');
-title('Bow-Tie Structure: IN (blu), SCC (rosso), OUT (verde), Tubes (arancio), Tendrils (viola)');
+title('Bow-Tie Structure: IN (blue), SCC (red), OUT (green), Tubes (orange), Tendrils (violet)');
 fileName = ['GCC' year '.png'];
 exportgraphics(gcf, fullfile(yearDir, fileName), 'Resolution', 300);
 
 % Nomi singoli nodi
-% fprintf('\nNodi nella SCC:\n');     disp(Nodi.Name(SCC_nodes));
+fprintf('\nNodi nella SCC:\n');     disp(Nodi.Name(SCC_nodes));
 % fprintf('\nNodi nella IN:\n');      disp(Nodi.Name(IN_nodes));
 % fprintf('\nNodi nella OUT:\n');     disp(Nodi.Name(OUT_nodes));
 % fprintf('\nNodi nei Tubes:\n');     disp(Nodi.Name(tubes));

@@ -2,7 +2,9 @@ function degreeClusteringScatterPlot(degrees, clusteringCoeffs)
     % Ensure input data is double precision
     degrees = double(degrees);
     clusteringCoeffs = double(clusteringCoeffs);
-
+    fprintf('Number of nodes: %d\n', length(full(degrees)));
+    fprintf('Average degree: %.2f\n', mean(full(degrees)));
+    fprintf('Average clustering coefficient: %.4f\n', mean(full(clusteringCoeffs)));
     % Create the figure with a specific size
     fig = figure('Position', [100, 100, 800, 600]);
     
@@ -53,9 +55,6 @@ function degreeClusteringScatterPlot(degrees, clusteringCoeffs)
     % Adjust the layout
     set(fig, 'Color', 'w');  % Set white background
     
-    % Add a subtle watermark
-    text(0.98, 0.02, 'Created with MATLAB', 'Units', 'normalized', ...
-         'FontSize', 8, 'Color', [0.7 0.7 0.7], 'HorizontalAlignment', 'right');
     
     hold off;
     saveas(gcf, 'nomefile.png')

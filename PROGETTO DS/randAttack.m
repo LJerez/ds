@@ -71,18 +71,18 @@ x_axis = (0:N-1) / N;
 figure; hold on;
 
 for i = 1:num_iterations
-    plot(x_axis, all_curves(i, :) / N, 'Color', [0.8 0.8 0.8]); 
+    plot(x_axis, all_curves(i, :) / N, 'Color', [0 0 0]); 
 end
 
 xlabel('Fraction of Nodes Removed (f)');
 ylabel('Relative Size of Giant Component (S)');
 title(sprintf('Robustness Analysis: Random Failure (%d runs)', num_iterations));
-grid on;
+grid off;
 xlim([0 1]);
 ylim([0 1]);
 
 % Threshold line (rimane)
-yline(0.5, '--k', 'Collapse Threshold');
+yline(0.5, '--k', '50% threshold');
 
 
 end
